@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>NextBSD &mdash; the BSD of the 21st century</title>
+<meta name="description" content="NextBSD brings the macOS system layer &mdash; Mach IPC, launchd, libxpc, libdispatch &mdash; to a modern FreeBSD base. Open in the open.">
+<meta property="og:title" content="NextBSD">
+<meta property="og:description" content="The BSD of the 21st century. Mach + launchd + XPC on FreeBSD.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nextbsd.org/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23000'/%3E%3Ctext x='32' y='42' font-family='-apple-system,Helvetica,Arial' font-size='28' font-weight='700' text-anchor='middle' fill='%23ffcc00'%3EB%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #000;
+    --bg-soft: #0a0a0a;
+    --panel: #0f0f12;
+    --line: #1c1c20;
+    --line-soft: #141418;
+    --fg: #f5f5f7;
+    --fg-dim: #a1a1a6;
+    --fg-mute: #6e6e73;
+    --accent-y: #ffcc00;
+    --accent-r: #ff3b30;
+    --accent-c: #00d4ff;
+    --accent-g: #30d158;
+    --accent-m: #ff2d55;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  a { color: var(--accent-c); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code, kbd {
+    font-family: "SF Mono", ui-monospace, "Menlo", Consolas, monospace;
+    font-size: 0.92em;
+    background: #15151a;
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #e8e8ed;
+  }
+
+  /* ---------- Layout ---------- */
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+  section { padding: 96px 0; position: relative; }
+  section + section { border-top: 1px solid var(--line-soft); }
+
+  /* ---------- Top nav ---------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    background: rgba(0, 0, 0, 0.72);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 600; letter-spacing: 0.2px;
+    color: var(--fg);
+  }
+  .nav-brand-mark {
+    width: 22px; height: 22px; border-radius: 4px;
+    background: linear-gradient(135deg, #1a1a1f 0%, #000 100%);
+    border: 1px solid #2a2a30;
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 800; color: var(--accent-y);
+  }
+  .nav-links { display: flex; gap: 22px; }
+  .nav-links a {
+    color: var(--fg-dim); font-size: 14px;
+    text-decoration: none;
+  }
+  .nav-links a:hover { color: var(--fg); text-decoration: none; }
+  @media (max-width: 640px) { .nav-links { display: none; } }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: calc(100vh - 56px);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 80px 0 120px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(900px 500px at 50% 28%, rgba(255, 204, 0, 0.06), transparent 60%),
+      radial-gradient(700px 500px at 18% 80%, rgba(255, 45, 85, 0.05), transparent 60%),
+      radial-gradient(700px 500px at 82% 80%, rgba(0, 212, 255, 0.05), transparent 60%);
+    pointer-events: none;
+  }
+  .hero::after {
+    /* subtle grid */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; z-index: 1; }
+
+  /* ---------- Logo cube (SVG) ---------- */
+  .logo-cube {
+    width: clamp(220px, 32vw, 320px);
+    height: auto;
+    margin: 0 auto 48px;
+    display: block;
+    animation: cube-float 9s ease-in-out infinite;
+  }
+  @keyframes cube-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+
+  /* ---------- Wordmark + tagline ---------- */
+  .wordmark {
+    font-size: clamp(56px, 9vw, 104px);
+    font-weight: 800;
+    letter-spacing: -3px;
+    margin: 0;
+    background: linear-gradient(180deg, #fff 0%, #b8b8c0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .wordmark .next { font-weight: 300; }
+  .tagline {
+    font-size: clamp(18px, 2.2vw, 24px);
+    color: var(--fg-dim);
+    margin: 16px 0 0;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+  }
+  .cta {
+    margin-top: 44px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 22px;
+    border-radius: 99px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn-primary {
+    background: #fff;
+    color: #000;
+    border: 1px solid #fff;
+  }
+  .btn-primary:hover { transform: translateY(-1px); background: #f0f0f0; text-decoration: none; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid #2a2a30;
+  }
+  .btn-ghost:hover { border-color: #4a4a52; text-decoration: none; }
+
+  /* ---------- Section heads ---------- */
+  .kicker {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--accent-c);
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+  .section-title {
+    font-size: clamp(32px, 4.5vw, 52px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    margin: 0 0 16px;
+    line-height: 1.1;
+  }
+  .section-lede {
+    font-size: clamp(17px, 1.6vw, 19px);
+    color: var(--fg-dim);
+    max-width: 720px;
+    margin: 0 0 56px;
+  }
+
+  /* ---------- Vision (manifesto) ---------- */
+  .vision-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  @media (max-width: 760px) { .vision-grid { grid-template-columns: 1fr; } }
+  .vision-card {
+    padding: 32px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: linear-gradient(180deg, var(--panel) 0%, #08080a 100%);
+  }
+  .vision-card h3 {
+    font-size: 22px;
+    margin: 0 0 10px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+  .vision-card p { margin: 0; color: var(--fg-dim); }
+
+  /* ---------- Components grid ---------- */
+  .components {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 880px) { .components { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .components { grid-template-columns: 1fr; } }
+  .component {
+    padding: 26px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .component:hover { border-color: #2a2a30; transform: translateY(-2px); }
+  .component .icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: grid; place-items: center;
+    margin-bottom: 16px;
+    font-size: 18px; font-weight: 700;
+    background: #16161a;
+    border: 1px solid #232328;
+  }
+  .component h4 {
+    margin: 0 0 6px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+  .component p {
+    margin: 0;
+    color: var(--fg-dim);
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+  .component .tag {
+    display: inline-block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 14px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: #15151a;
+    color: var(--fg-mute);
+    border: 1px solid #1f1f25;
+  }
+  .component .tag.ok { color: var(--accent-g); border-color: rgba(48,209,88,0.25); background: rgba(48,209,88,0.08); }
+  .component .tag.work { color: var(--accent-y); border-color: rgba(255,204,0,0.25); background: rgba(255,204,0,0.08); }
+  .component .tag.plan { color: var(--accent-c); border-color: rgba(0,212,255,0.25); background: rgba(0,212,255,0.08); }
+
+  /* ---------- Status timeline ---------- */
+  .status-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 18px;
+  }
+  .status-item {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .status-item:last-child { border-bottom: none; }
+  .status-when {
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    color: var(--fg-mute);
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+  .status-body strong { font-weight: 600; color: var(--fg); }
+  .status-body p { margin: 4px 0 0; color: var(--fg-dim); }
+  @media (max-width: 600px) {
+    .status-item { grid-template-columns: 1fr; gap: 4px; }
+  }
+
+  /* ---------- Quote pull ---------- */
+  .pull {
+    margin: 64px auto 0;
+    max-width: 820px;
+    padding: 40px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent-y);
+    border-radius: 8px;
+    background: linear-gradient(180deg, #0c0c0f 0%, #07070a 100%);
+    font-size: clamp(20px, 2.2vw, 26px);
+    line-height: 1.4;
+    color: var(--fg);
+    font-weight: 300;
+    letter-spacing: -0.4px;
+  }
+  .pull cite {
+    display: block;
+    margin-top: 18px;
+    font-style: normal;
+    font-size: 13px;
+    color: var(--fg-mute);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--line-soft);
+    padding: 56px 0 80px;
+    color: var(--fg-mute);
+    font-size: 13.5px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 32px;
+  }
+  @media (max-width: 760px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  .footer-grid h5 {
+    color: var(--fg);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0 0 14px;
+    font-weight: 600;
+  }
+  .footer-grid ul { list-style: none; padding: 0; margin: 0; }
+  .footer-grid li { margin-bottom: 8px; }
+  .footer-grid a { color: var(--fg-dim); }
+  .footer-grid a:hover { color: var(--fg); text-decoration: none; }
+  .colophon {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--fg-mute);
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .cube { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="#">
+      <span class="nav-brand-mark">N</span>
+      NextBSD
+    </a>
+    <div class="nav-links">
+      <a href="#vision">Vision</a>
+      <a href="#stack">The Stack</a>
+      <a href="#status">Status</a>
+      <a href="https://github.com/NextBSD">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <svg class="logo-cube" viewBox="0 0 400 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="NextBSD cube logo">
+      <defs>
+        <radialGradient id="cube-shadow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="#000" stop-opacity="0.55"/>
+          <stop offset="60%"  stop-color="#000" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="face-top" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#2c2c30"/>
+          <stop offset="100%" stop-color="#141418"/>
+        </linearGradient>
+        <linearGradient id="face-left" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#0d0d10"/>
+          <stop offset="100%" stop-color="#000"/>
+        </linearGradient>
+        <linearGradient id="face-right" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#1c1c20"/>
+          <stop offset="100%" stop-color="#0a0a0d"/>
+        </linearGradient>
+        <linearGradient id="edge-highlight" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stop-color="#fff" stop-opacity="0"/>
+          <stop offset="50%"  stop-color="#fff" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+
+      <!-- soft ground shadow -->
+      <ellipse cx="200" cy="420" rx="170" ry="20" fill="url(#cube-shadow)"/>
+
+      <!-- cube body: top + left + right faces (isometric) -->
+      <polygon points="200,60 340,140 200,220 60,140"   fill="url(#face-top)"   stroke="#3a3a40" stroke-width="0.6"/>
+      <polygon points="60,140 200,220 200,380 60,300"   fill="url(#face-left)"  stroke="#1a1a1e" stroke-width="0.6"/>
+      <polygon points="340,140 200,220 200,380 340,300" fill="url(#face-right)" stroke="#2a2a30" stroke-width="0.6"/>
+
+      <!-- crisp upper-edge highlights -->
+      <line x1="200" y1="60"  x2="340" y2="140" stroke="url(#edge-highlight)" stroke-width="1"/>
+      <line x1="200" y1="60"  x2="60"  y2="140" stroke="url(#edge-highlight)" stroke-width="1"/>
+
+    </svg>
+
+    <h1 class="wordmark"><span class="next">Next</span>BSD</h1>
+    <p class="tagline">The BSD of the 21st century.</p>
+
+    <div class="cta">
+      <a class="btn btn-primary" href="#vision">Read the manifesto</a>
+      <a class="btn btn-ghost" href="https://github.com/pkgdemon/freebsd-launchd-mach">See the code &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section id="vision">
+  <div class="wrap">
+    <p class="kicker">Why NextBSD</p>
+    <h2 class="section-title">A modern foundation, born from open source.</h2>
+    <p class="section-lede">
+      Twenty-five years ago Apple bet the company on bringing NeXTSTEP &mdash; Mach, BSD, the
+      Objective&#8209;C runtime &mdash; into the next millennium. NextBSD picks up the other
+      side of that lineage: take the system layer Apple open-sourced, run it on a living
+      FreeBSD kernel, and finish the work in the open.
+    </p>
+
+    <div class="vision-grid">
+      <div class="vision-card">
+        <h3>Mach where it belongs.</h3>
+        <p>An out-of-tree <code>mach.ko</code> ports the Mach IPC subsystem onto stock FreeBSD-15 &mdash; no kernel patches, no forked tree. <code>mach_msg</code> works end-to-end in userland today.</p>
+      </div>
+      <div class="vision-card">
+        <h3>launchd as PID 1.</h3>
+        <p>One supervisor for boot, login, services, sockets, and timers. Declarative plists replace the rc.d hand-wave. Boot ordering becomes a graph, not a filename sort.</p>
+      </div>
+      <div class="vision-card">
+        <h3>XPC for everything else.</h3>
+        <p>libxpc + libdispatch give every daemon a typed, queued, multiplexed message bus &mdash; the same primitives the modern Apple system stack is built on, ported and ELF-native.</p>
+      </div>
+      <div class="vision-card">
+        <h3>FreeBSD, all the way down.</h3>
+        <p>ELF binaries. ZFS. jails. bhyve. Ports. <code>pkg</code>. None of it gets traded away. NextBSD adds a system layer on top of the FreeBSD you already know &mdash; it doesn&rsquo;t replace it.</p>
+      </div>
+    </div>
+
+    <blockquote class="pull">
+      &ldquo;Take the system layer Apple open-sourced, run it on a living FreeBSD kernel,
+      and finish the work in the open.&rdquo;
+      <cite>&mdash; the project, in one sentence</cite>
+    </blockquote>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <p class="kicker">The stack</p>
+    <h2 class="section-title">What we&rsquo;re porting.</h2>
+    <p class="section-lede">
+      Every component below is real Apple-open-source code being lifted onto FreeBSD,
+      tracked in the open. No vapor &mdash; status reflects work-in-tree.
+    </p>
+
+    <div class="components">
+      <div class="component">
+        <div class="icon" style="color: var(--accent-y);">M</div>
+        <h4>mach.ko</h4>
+        <p>Out-of-tree Mach kernel module. <code>mach_msg</code>, ports, port rights, bootstrap server. Loads on stock FreeBSD-15; 19/19 smoke green.</p>
+        <span class="tag ok">Working</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: #fff;">L</div>
+        <h4>launchd</h4>
+        <p>Apple&rsquo;s <code>launchd-842.92.1</code> &mdash; the last open-source release &mdash; ported onto our Mach + libxpc stack. PID 1 capable.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-r);">X</div>
+        <h4>libxpc</h4>
+        <p>Typed inter-process messaging on top of libdispatch + Mach. Forked from ravynOS; bootstrap server + connection lifecycle in flight.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-c);">D</div>
+        <h4>libdispatch</h4>
+        <p>Grand Central Dispatch with a native Mach backend for FreeBSD &mdash; <code>DISPATCH_SOURCE_TYPE_MACH_RECV</code> on kqueue.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-g);">C</div>
+        <h4>CoreFoundation</h4>
+        <p>Hybrid CF: GNUstep libs-corebase for value types; swift-corelibs CF for CFMachPort, CFRunLoop, CFBundle. Ships with Apple ICU.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-m);">N</div>
+        <h4>notifyd / ASL</h4>
+        <p>Lightweight named-event bus and Apple System Logger &mdash; structured log records, BSD-text dual output, same C API.</p>
+        <span class="tag plan">Planned</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-y);">cfg</div>
+        <h4>configd</h4>
+        <p>One daemon owns network state, hostname, DNS. Apple&rsquo;s configd ported as <code>netconfigd</code> with a Mach-RPC API.</p>
+        <span class="tag plan">Planned</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-c);">io</div>
+        <h4>IOKit registry</h4>
+        <p>A <code>hwregd</code> that reads <code>/dev/devctl</code>, kldloads on nomatch, and exposes an IOKit-shape IORegistry. <code>ioreg -l</code> on FreeBSD.</p>
+        <span class="tag plan">Planned</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: #fff;">fs</div>
+        <h4>HFS+ / DiskArbitration</h4>
+        <p>Apple&rsquo;s HFS+ as a FreeBSD <code>hfs.ko</code>; DiskArbitration over <code>libgeom</code> + <code>devctl(4)</code>. Foundation for native DMG mounting.</p>
+        <span class="tag plan">Planned</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="status">
+  <div class="wrap">
+    <p class="kicker">Where we are</p>
+    <h2 class="section-title">Status &amp; recent milestones.</h2>
+    <p class="section-lede">
+      NextBSD is built in public across several repositories. The work below is
+      verifiable in commit logs &mdash; not roadmap promises.
+    </p>
+
+    <ul class="status-list">
+      <li class="status-item">
+        <span class="status-when">2026 &middot; Q2</span>
+        <div class="status-body">
+          <strong>freebsd-launchd-mach &mdash; Phase B Tier 1 + C1&ndash;C3 complete.</strong>
+          <p>10 Mach syscalls wired into FreeBSD&rsquo;s reserved <code>lkmnosys</code> slots, lazy Mach init, end-to-end userland <code>mach_msg</code> proof. Zero kernel patches.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">2026 &middot; Q1</span>
+        <div class="status-body">
+          <strong>libicu vendoring landed.</strong>
+          <p>Swift Foundation ICU built as <code>/usr/lib/system/libicucore.so</code>, matching macOS&rsquo;s libicucore.dylib layout.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">2025 &middot; Q4</span>
+        <div class="status-body">
+          <strong>gershwin-on-freebsd Phase 2 landed.</strong>
+          <p>launchd as PID 1 via Option D, bedrock plists from freebsd-launchd, gershwin-specific dshelper / loginwindow plists. No getty &mdash; LoginWindow is the login.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">2025 &middot; Q3</span>
+        <div class="status-body">
+          <strong>Live ISO booting on real hardware.</strong>
+          <p>cd9660 + mkuzip + gunion overlay + init_chroot pivot. 396 MiB minimal, 3.8 GiB with KDE Plasma 6.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="contribute">
+  <div class="wrap" style="text-align:center;">
+    <p class="kicker">Get involved</p>
+    <h2 class="section-title">All work happens on GitHub.</h2>
+    <p class="section-lede" style="margin-left:auto; margin-right:auto;">
+      The project lives across <code>NextBSD</code>, <code>pkgdemon/freebsd-launchd-mach</code>,
+      and <code>gershwin-desktop</code>. Plans, audits, and per-component porting work are
+      published as they happen.
+    </p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/NextBSD">github.com/NextBSD</a>
+      <a class="btn btn-ghost" href="https://pkgdemon.github.io/">Read the research &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h5>NextBSD</h5>
+        <p style="margin:0; color: var(--fg-dim); max-width: 320px;">
+          The BSD of the 21st century. Mach, launchd, and XPC on a modern FreeBSD base.
+          Open source, top to bottom.
+        </p>
+      </div>
+      <div>
+        <h5>Code</h5>
+        <ul>
+          <li><a href="https://github.com/NextBSD">NextBSD org</a></li>
+          <li><a href="https://github.com/pkgdemon/freebsd-launchd-mach">launchd-mach</a></li>
+          <li><a href="https://github.com/gershwin-desktop">Gershwin</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Research</h5>
+        <ul>
+          <li><a href="https://pkgdemon.github.io/">All plans</a></li>
+          <li><a href="https://pkgdemon.github.io/freebsd-launchd-mach-plan.html">launchd-mach plan</a></li>
+          <li><a href="https://pkgdemon.github.io/freebsd-libxpc-plan.html">libxpc plan</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Related</h5>
+        <ul>
+          <li><a href="https://www.freebsd.org/">FreeBSD</a></li>
+          <li><a href="https://gnustep.github.io/">GNUstep</a></li>
+          <li><a href="https://ravynos.com/">ravynOS</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="colophon">
+      <span>&copy; NextBSD project &middot; <a href="https://nextbsd.org/" style="color:inherit;">nextbsd.org</a></span>
+      <span>Drag. Drop. Done.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Smooth-scroll to in-page anchors AND drop the #fragment from the URL,
+  // so a reload returns the visitor to the top (the cube) instead of
+  // sticking on whatever section they last jumped to.
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href').slice(1);
+      e.preventDefault();
+      var target = id ? document.getElementById(id) : null;
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        // empty href (#) or brand-link → return to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    });
+  });
+</script>
+
+</body>
+</html>
