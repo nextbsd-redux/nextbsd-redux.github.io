@@ -237,6 +237,128 @@
   }
   .vision-card p { margin: 0; color: var(--fg-dim); }
 
+  /* ---------- About: forms ---------- */
+  .about-bridge {
+    font-size: clamp(19px, 2vw, 24px);
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    color: var(--fg);
+    margin: 0 0 28px;
+  }
+  .forms-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 760px) { .forms-grid { grid-template-columns: 1fr; } }
+  .forms-grid .vision-card {
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .forms-grid .vision-card:hover { border-color: #2a2a30; transform: translateY(-2px); }
+  .forms-grid .vision-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--form-accent, var(--accent-c));
+    opacity: 0.85;
+  }
+  .forms-grid .vision-card h3 { font-size: 19px; }
+  .forms-grid .vision-card .role {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    color: var(--form-accent, var(--accent-c));
+    margin: 0 0 10px;
+  }
+
+  /* ---------- About: benefits ---------- */
+  .about-lede {
+    max-width: 760px;
+    font-size: clamp(18px, 1.9vw, 22px);
+    line-height: 1.5;
+    letter-spacing: -0.3px;
+    color: var(--fg-dim);
+    margin: 0 0 48px;
+  }
+  .about-lede strong { color: var(--fg); font-weight: 600; }
+  .benefits {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 0 0 72px;
+  }
+  @media (max-width: 760px) { .benefits { grid-template-columns: 1fr; } }
+  .benefit {
+    padding: 30px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: linear-gradient(180deg, var(--panel) 0%, #08080a 100%);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .benefit:hover { border-color: #2a2a30; transform: translateY(-2px); }
+  .benefit .b-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: grid; place-items: center;
+    margin-bottom: 18px;
+    background: #16161a;
+    border: 1px solid #232328;
+    color: var(--b-accent, var(--accent-c));
+  }
+  .benefit h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+  .benefit p {
+    margin: 0;
+    color: var(--fg-dim);
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .benefit p + p { margin-top: 12px; }
+
+  /* ---------- Team ---------- */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 760px;
+  }
+  @media (max-width: 640px) { .team-grid { grid-template-columns: 1fr; } }
+  .member {
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--panel);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .member:hover { border-color: #2a2a30; transform: translateY(-2px); }
+  .member h3 {
+    margin: 0 0 4px;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+  .member .member-role {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    color: var(--accent-c);
+    margin: 0 0 12px;
+  }
+  .member p { margin: 0 0 12px; color: var(--fg-dim); font-size: 14.5px; line-height: 1.6; }
+  .member a { font-size: 13px; }
+
   /* ---------- Components grid ---------- */
   .components {
     display: grid;
@@ -394,10 +516,10 @@
       NextBSD
     </a>
     <div class="nav-links">
-      <a href="#vision">Vision</a>
-      <a href="#stack">The Stack</a>
-      <a href="#status">Status</a>
-      <a href="https://github.com/NextBSD">GitHub</a>
+      <a href="#stack">Status</a>
+      <a href="#history">History</a>
+      <a href="#team">Team</a>
+      <a href="https://github.com/nextbsd-redux/nextbsd">GitHub</a>
     </div>
   </div>
 </nav>
@@ -448,214 +570,294 @@
     <p class="tagline">The BSD of the 21st century.</p>
 
     <div class="cta">
-      <a class="btn btn-primary" href="#vision">Read the manifesto</a>
-      <a class="btn btn-ghost" href="https://github.com/pkgdemon/freebsd-launchd-mach">See the code &rarr;</a>
+      <a class="btn btn-primary" href="https://github.com/nextbsd-redux/nextbsd/releases/tag/continuous">Download Preview &rarr;</a>
     </div>
-  </div>
-</section>
-
-<section id="vision">
-  <div class="wrap">
-    <p class="kicker">Why NextBSD</p>
-    <h2 class="section-title">A modern foundation, born from open source.</h2>
-    <p class="section-lede">
-      Twenty-five years ago Apple bet the company on bringing NeXTSTEP &mdash; Mach, BSD, the
-      Objective&#8209;C runtime &mdash; into the next millennium. NextBSD picks up the other
-      side of that lineage: take the system layer Apple open-sourced, run it on a living
-      FreeBSD kernel, and finish the work in the open.
-    </p>
-
-    <div class="vision-grid">
-      <div class="vision-card">
-        <h3>Mach where it belongs.</h3>
-        <p>An out-of-tree <code>mach.ko</code> ports the Mach IPC subsystem onto stock FreeBSD-15 &mdash; no kernel patches, no forked tree. <code>mach_msg</code> works end-to-end in userland today.</p>
-      </div>
-      <div class="vision-card">
-        <h3>launchd as PID 1.</h3>
-        <p>One supervisor for boot, login, services, sockets, and timers. Declarative plists replace the rc.d hand-wave. Boot ordering becomes a graph, not a filename sort.</p>
-      </div>
-      <div class="vision-card">
-        <h3>XPC for everything else.</h3>
-        <p>libxpc + libdispatch give every daemon a typed, queued, multiplexed message bus &mdash; the same primitives the modern Apple system stack is built on, ported and ELF-native.</p>
-      </div>
-      <div class="vision-card">
-        <h3>FreeBSD, all the way down.</h3>
-        <p>ELF binaries. ZFS. jails. bhyve. Ports. <code>pkg</code>. None of it gets traded away. NextBSD adds a system layer on top of the FreeBSD you already know &mdash; it doesn&rsquo;t replace it.</p>
-      </div>
-    </div>
-
-    <blockquote class="pull">
-      &ldquo;Take the system layer Apple open-sourced, run it on a living FreeBSD kernel,
-      and finish the work in the open.&rdquo;
-      <cite>&mdash; the project, in one sentence</cite>
-    </blockquote>
   </div>
 </section>
 
 <section id="stack">
   <div class="wrap">
-    <p class="kicker">The stack</p>
-    <h2 class="section-title">What we&rsquo;re porting.</h2>
-    <p class="section-lede">
-      Every component below is real Apple-open-source code being lifted onto FreeBSD,
-      tracked in the open. No vapor &mdash; status reflects work-in-tree.
-    </p>
+    <p class="kicker">Status</p>
 
     <div class="components">
       <div class="component">
-        <div class="icon" style="color: var(--accent-y);">M</div>
-        <h4>mach.ko</h4>
-        <p>Out-of-tree Mach kernel module. <code>mach_msg</code>, ports, port rights, bootstrap server. Loads on stock FreeBSD-15; 19/19 smoke green.</p>
-        <span class="tag ok">Working</span>
+        <div class="icon" style="color: var(--accent-g);">K</div>
+        <h4>Kernel + Mach</h4>
+        <p>Our own kernel, ABI-compatible with FreeBSD, with Mach built in &mdash; <code>mach_msg</code>, ports, port rights, bootstrap server. Kernel extensions provide drivers for GPU, Wi-Fi, and other hardware.</p>
+        <span class="tag ok">Done</span>
       </div>
       <div class="component">
         <div class="icon" style="color: #fff;">L</div>
         <h4>launchd</h4>
         <p>Apple&rsquo;s <code>launchd-842.92.1</code> &mdash; the last open-source release &mdash; ported onto our Mach + libxpc stack. PID 1 capable.</p>
-        <span class="tag work">In progress</span>
+        <span class="tag ok">Working</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-r);">X</div>
         <h4>libxpc</h4>
         <p>Typed inter-process messaging on top of libdispatch + Mach. Forked from ravynOS; bootstrap server + connection lifecycle in flight.</p>
-        <span class="tag work">In progress</span>
+        <span class="tag ok">Working</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-c);">D</div>
         <h4>libdispatch</h4>
-        <p>Grand Central Dispatch with a native Mach backend for FreeBSD &mdash; <code>DISPATCH_SOURCE_TYPE_MACH_RECV</code> on kqueue.</p>
-        <span class="tag work">In progress</span>
+        <p>Grand Central Dispatch with a native Mach backend for our kernel &mdash; <code>DISPATCH_SOURCE_TYPE_MACH_RECV</code> on kqueue.</p>
+        <span class="tag ok">Working</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-g);">C</div>
         <h4>CoreFoundation</h4>
         <p>Hybrid CF: GNUstep libs-corebase for value types; swift-corelibs CF for CFMachPort, CFRunLoop, CFBundle. Ships with Apple ICU.</p>
-        <span class="tag work">In progress</span>
+        <span class="tag ok">Working</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-m);">N</div>
         <h4>notifyd / ASL</h4>
         <p>Lightweight named-event bus and Apple System Logger &mdash; structured log records, BSD-text dual output, same C API.</p>
-        <span class="tag plan">Planned</span>
+        <span class="tag ok">Working</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-y);">cfg</div>
         <h4>configd</h4>
         <p>One daemon owns network state, hostname, DNS. Apple&rsquo;s configd ported as <code>netconfigd</code> with a Mach-RPC API.</p>
-        <span class="tag plan">Planned</span>
+        <span class="tag ok">Working</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-m);">mdns</div>
+        <h4>mDNSResponder</h4>
+        <p>Apple&rsquo;s Bonjour &mdash; multicast DNS and DNS-SD service discovery, ported as the system mDNS daemon with the same <code>dns-sd</code> API.</p>
+        <span class="tag ok">Working</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-c);">io</div>
         <h4>IOKit registry</h4>
-        <p>A <code>hwregd</code> that reads <code>/dev/devctl</code>, kldloads on nomatch, and exposes an IOKit-shape IORegistry. <code>ioreg -l</code> on FreeBSD.</p>
-        <span class="tag plan">Planned</span>
+        <p>A replacement for <code>devmatch</code>/<code>devd</code> exposing an IOKit-shape IORegistry &mdash; <code>IOServiceWaitQuiet</code>, <code>IORegistryEntryGetBusyState</code>, and <code>IOKitWaitQuiet</code>.</p>
+        <span class="tag ok">Working</span>
       </div>
       <div class="component">
         <div class="icon" style="color: #fff;">fs</div>
-        <h4>HFS+ / DiskArbitration</h4>
-        <p>Apple&rsquo;s HFS+ as a FreeBSD <code>hfs.ko</code>; DiskArbitration over <code>libgeom</code> + <code>devctl(4)</code>. Foundation for native DMG mounting.</p>
+        <h4>DiskArbitration</h4>
+        <p>DiskArbitration over <code>libgeom</code> + <code>devctl(4)</code>.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-y);">bs</div>
+        <h4>bootstrap_cmds</h4>
+        <p>Darwin&rsquo;s <code>bootstrap_cmds</code> &mdash; the Mach interface generator <code>mig</code> and friends. Core build tooling for the Mach RPC layer.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-c);">net</div>
+        <h4>network_cmds</h4>
+        <p>Darwin&rsquo;s <code>network_cmds</code> &mdash; <code>ifconfig</code>, <code>route</code>, <code>netstat</code> and the networking userland.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: #fff;">fl</div>
+        <h4>file_cmds</h4>
+        <p>Darwin&rsquo;s <code>file_cmds</code> &mdash; <code>cp</code>, <code>mv</code>, <code>ls</code>, <code>chmod</code> and the core file-manipulation utilities.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-g);">sh</div>
+        <h4>shell_cmds</h4>
+        <p>Darwin&rsquo;s <code>shell_cmds</code> &mdash; shell-era basics: <code>echo</code>, <code>test</code>, <code>kill</code>, <code>su</code>, and their companions.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-r);">sys</div>
+        <h4>system_cmds</h4>
+        <p>Darwin&rsquo;s <code>system_cmds</code> &mdash; <code>ps</code>, <code>sysctl</code>, <code>login</code>, and low-level system administration tools.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-m);">txt</div>
+        <h4>text_cmds</h4>
+        <p>Darwin&rsquo;s <code>text_cmds</code> &mdash; text-processing utilities: <code>sort</code>, <code>uniq</code>, <code>cut</code>, <code>cat</code>, and friends.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-y);">adv</div>
+        <h4>adv_cmds</h4>
+        <p>Darwin&rsquo;s <code>adv_cmds</code> &mdash; the advanced commands grab-bag: locale tooling, <code>finger</code>, <code>last</code>, and more.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-c);">pm</div>
+        <h4>PowerManagement</h4>
+        <p>Darwin&rsquo;s <code>PowerManagement</code> &mdash; <code>pmset</code> and the power-management userland for sleep, wake, and battery policy.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-y);">img</div>
+        <h4>IMG + ISO</h4>
+        <p>A bootable disk image you can write to USB and boot today; an ISO follows later for CD/optical and virtual machine convenience.</p>
+        <span class="tag work">In progress</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-g);">ins</div>
+        <h4>Installer</h4>
+        <p>Lay down a fresh install &mdash; from tagged releases or rolling continuous builds alike.</p>
+        <span class="tag plan">Planned</span>
+      </div>
+      <div class="component">
+        <div class="icon" style="color: var(--accent-g);">upd</div>
+        <h4>Updater</h4>
+        <p>Move an existing system forward in place &mdash; tracking releases or the rolling continuous stream.</p>
         <span class="tag plan">Planned</span>
       </div>
     </div>
   </div>
 </section>
 
-<section id="status">
+<section id="history">
   <div class="wrap">
-    <p class="kicker">Where we are</p>
-    <h2 class="section-title">Status &amp; recent milestones.</h2>
+    <p class="kicker">History</p>
+    <h2 class="section-title">Where NextBSD came from.</h2>
     <p class="section-lede">
-      NextBSD is built in public across several repositories. The work below is
-      verifiable in commit logs &mdash; not roadmap promises.
+      A long lineage runs from Bell Labs UNIX, through Mach and NeXTSTEP, into
+      Darwin and the BSDs &mdash; and lands here. NextBSD Redux is the latest
+      pickup of work that has changed hands more than once.
     </p>
 
     <ul class="status-list">
       <li class="status-item">
-        <span class="status-when">2026 &middot; Q2</span>
+        <span class="status-when">1969</span>
         <div class="status-body">
-          <strong>freebsd-launchd-mach &mdash; Phase B Tier 1 + C1&ndash;C3 complete.</strong>
-          <p>10 Mach syscalls wired into FreeBSD&rsquo;s reserved <code>lkmnosys</code> slots, lazy Mach init, end-to-end userland <code>mach_msg</code> proof. Zero kernel patches.</p>
+          <strong>UNIX at Bell Labs.</strong>
+          <p>AT&amp;T&rsquo;s Bell Labs builds UNIX &mdash; the operating system every system on this timeline ultimately descends from.</p>
         </div>
       </li>
       <li class="status-item">
-        <span class="status-when">2026 &middot; Q1</span>
+        <span class="status-when">1977</span>
         <div class="status-body">
-          <strong>libicu vendoring landed.</strong>
-          <p>Swift Foundation ICU built as <code>/usr/lib/system/libicucore.so</code>, matching macOS&rsquo;s libicucore.dylib layout.</p>
+          <strong>1BSD &mdash; the Berkeley line begins.</strong>
+          <p>UC Berkeley releases the first Berkeley Software Distribution, a set of enhancements layered on AT&amp;T UNIX.</p>
         </div>
       </li>
       <li class="status-item">
-        <span class="status-when">2025 &middot; Q4</span>
+        <span class="status-when">1983</span>
         <div class="status-body">
-          <strong>gershwin-on-freebsd Phase 2 landed.</strong>
-          <p>launchd as PID 1 via Option D, bedrock plists from freebsd-launchd, gershwin-specific dshelper / loginwindow plists. No getty &mdash; LoginWindow is the login.</p>
+          <strong>4.2BSD: FFS and TCP/IP.</strong>
+          <p>Berkeley ships the Fast File System and TCP/IP networking &mdash; storage and networking groundwork that later BSDs, and macOS, would inherit.</p>
         </div>
       </li>
       <li class="status-item">
-        <span class="status-when">2025 &middot; Q3</span>
+        <span class="status-when">mid-1980s</span>
         <div class="status-body">
-          <strong>Live ISO booting on real hardware.</strong>
-          <p>cd9660 + mkuzip + gunion overlay + init_chroot pivot. 396 MiB minimal, 3.8 GiB with KDE Plasma 6.</p>
+          <strong>Mach is born at Carnegie Mellon.</strong>
+          <p>CMU develops the Mach microkernel &mdash; a message-passing foundation that becomes the kernel core of NeXTSTEP and, later, Darwin.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">1985</span>
+        <div class="status-body">
+          <strong>Steve Jobs founds NeXT.</strong>
+          <p>After leaving Apple, Jobs starts NeXT to build a new generation of workstations and software.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">1989</span>
+        <div class="status-body">
+          <strong>NeXTSTEP ships.</strong>
+          <p>NeXT releases NeXTSTEP &mdash; the Mach kernel and BSD userland under an object-oriented application layer. The blueprint NextBSD follows.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">1993</span>
+        <div class="status-body">
+          <strong>FreeBSD and NetBSD fork from 386BSD.</strong>
+          <p>The open BSD distributions emerge and carry the Berkeley lineage forward. FreeBSD becomes the base NextBSD builds on.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">1996</span>
+        <div class="status-body">
+          <strong>Apple acquires NeXT.</strong>
+          <p>NeXTSTEP &mdash; Mach, BSD, and the Objective-C runtime &mdash; comes back to Apple and becomes the foundation of its next operating system.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">2000</span>
+        <div class="status-body">
+          <strong>Mac OS X on Darwin.</strong>
+          <p>Apple ships Mac OS X atop Darwin &mdash; the Mach kernel fused with BSD userland &mdash; the open-source core under every Apple OS since.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">2006</span>
+        <div class="status-body">
+          <strong>OpenDarwin winds down.</strong>
+          <p>The effort to ship Darwin as a standalone, installable operating system ends &mdash; leaving the system layer open but homeless.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">2015</span>
+        <div class="status-body">
+          <strong>The original NextBSD.</strong>
+          <p>A sponsored project sets out to bring the Darwin system layer &mdash; Mach IPC, launchd, libdispatch, notifyd &mdash; onto a FreeBSD base.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">2016</span>
+        <div class="status-body">
+          <strong>NextBSD funding ends.</strong>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">2021</span>
+        <div class="status-body">
+          <strong>ravynOS begins.</strong>
+          <p>A new macOS-compatible effort starts on a FreeBSD base, pursuing a familiar desktop and app experience.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">2025</span>
+        <div class="status-body">
+          <strong>ravynOS moves to XNU.</strong>
+          <p>ravynOS shifts its kernel direction toward XNU.</p>
+        </div>
+      </li>
+      <li class="status-item">
+        <span class="status-when">2026</span>
+        <div class="status-body">
+          <strong>NextBSD Redux picks up the work.</strong>
+          <p>A new vision based on those earlier efforts.</p>
         </div>
       </li>
     </ul>
   </div>
 </section>
 
-<section id="contribute">
-  <div class="wrap" style="text-align:center;">
-    <p class="kicker">Get involved</p>
-    <h2 class="section-title">All work happens on GitHub.</h2>
-    <p class="section-lede" style="margin-left:auto; margin-right:auto;">
-      The project lives across <code>NextBSD</code>, <code>pkgdemon/freebsd-launchd-mach</code>,
-      and <code>gershwin-desktop</code>. Plans, audits, and per-component porting work are
-      published as they happen.
+<section id="team">
+  <div class="wrap">
+    <p class="kicker">Team</p>
+    <h2 class="section-title">Who&rsquo;s building it.</h2>
+    <p class="section-lede">
+      A small team working in the open. As the effort grows, this is where
+      core developers and key contributors will be credited.
     </p>
-    <div class="cta">
-      <a class="btn btn-primary" href="https://github.com/NextBSD">github.com/NextBSD</a>
-      <a class="btn btn-ghost" href="https://pkgdemon.github.io/">Read the research &rarr;</a>
+    <div class="team-grid">
+      <div class="member" style="--accent-c: var(--accent-c);">
+        <h3>Joe Maloney</h3>
+        <span class="member-role">Maintainer &amp; lead</span>
+        <p>Maintains the project and its research.</p>
+        <a href="https://pkgdemon.github.io">pkgdemon.github.io</a>
+      </div>
+      <div class="member">
+        <h3>Claude</h3>
+        <span class="member-role">AI collaborator &middot; Anthropic</span>
+        <p>Pairs on porting, auditing, and integration as a force multiplier.</p>
+        <a href="https://www.anthropic.com/claude">anthropic.com/claude</a>
+      </div>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <div class="footer-grid">
-      <div>
-        <h5>NextBSD</h5>
-        <p style="margin:0; color: var(--fg-dim); max-width: 320px;">
-          The BSD of the 21st century. Mach, launchd, and XPC on a modern FreeBSD base.
-          Open source, top to bottom.
-        </p>
-      </div>
-      <div>
-        <h5>Code</h5>
-        <ul>
-          <li><a href="https://github.com/NextBSD">NextBSD org</a></li>
-          <li><a href="https://github.com/pkgdemon/freebsd-launchd-mach">launchd-mach</a></li>
-          <li><a href="https://github.com/gershwin-desktop">Gershwin</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Research</h5>
-        <ul>
-          <li><a href="https://pkgdemon.github.io/">All plans</a></li>
-          <li><a href="https://pkgdemon.github.io/freebsd-launchd-mach-plan.html">launchd-mach plan</a></li>
-          <li><a href="https://pkgdemon.github.io/freebsd-libxpc-plan.html">libxpc plan</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Related</h5>
-        <ul>
-          <li><a href="https://www.freebsd.org/">FreeBSD</a></li>
-          <li><a href="https://gnustep.github.io/">GNUstep</a></li>
-          <li><a href="https://ravynos.com/">ravynOS</a></li>
-        </ul>
-      </div>
-    </div>
     <div class="colophon">
       <span>&copy; NextBSD project &middot; <a href="https://nextbsd.org/" style="color:inherit;">nextbsd.org</a></span>
-      <span>Drag. Drop. Done.</span>
     </div>
   </div>
 </footer>
