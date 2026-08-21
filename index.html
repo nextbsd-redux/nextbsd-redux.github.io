@@ -93,7 +93,72 @@
     text-decoration: none;
   }
   .nav-links a:hover { color: var(--fg); text-decoration: none; }
-  @media (max-width: 640px) { .nav-links { display: none; } }
+
+  /* Hamburger. Hidden entirely at desktop widths -- the tab row is the
+     nav there, and the button would just be a second way to do the same
+     thing. It appears only once the tabs no longer fit. */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px; height: 40px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-toggle:hover { border-color: #2a2a30; }
+  .nav-toggle[aria-expanded="true"] { border-color: #2a2a30; }
+  .nav-toggle-bar {
+    display: block;
+    width: 18px; height: 1.5px;
+    background: var(--fg-dim);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  /* Bars fold into an X when open: 1.5px bar + 5px gap = 6.5px of travel. */
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+
+  /* 700px, not 640: six tabs plus the brand need ~620px, so 640 left them
+     cramped rather than comfortable in the last 60px before they vanished. */
+  @media (max-width: 700px) {
+    .nav-toggle { display: flex; }
+    .nav-links {
+      /* .nav is position:sticky, so it is the containing block -- the panel
+         spans the full nav width rather than the padded .wrap. */
+      position: absolute;
+      top: 56px;
+      left: 0; right: 0;
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      padding: 4px 0 10px;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .nav-links[data-open="true"] { display: flex; }
+    .nav-links a {
+      padding: 13px 28px;
+      font-size: 15px;
+      border-top: 1px solid var(--line-soft);
+    }
+    .nav-links a:first-child { border-top: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-toggle-bar { transition: none; }
+  }
 
   /* ---------- Hero ---------- */
   .hero {
@@ -522,7 +587,13 @@
       <span class="nav-brand-mark">N</span>
       NextBSD
     </a>
-    <div class="nav-links">
+    <button class="nav-toggle" type="button" aria-label="Menu"
+            aria-expanded="false" aria-controls="nav-links">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+    <div class="nav-links" id="nav-links">
       <a href="#stack">Status</a>
       <a href="#history">History</a>
       <a href="#team">Team</a>
@@ -854,6 +925,39 @@
       history.replaceState(null, '', window.location.pathname + window.location.search);
     });
   });
+
+  // Nav hamburger. Only reachable below the 700px breakpoint, where CSS
+  // reveals the button; above it the tab row is always visible and this
+  // code never runs.
+  (function () {
+    var btn = document.querySelector('.nav-toggle');
+    var links = document.getElementById('nav-links');
+    if (!btn || !links) return;
+
+    function setOpen(open) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      links.setAttribute('data-open', open ? 'true' : 'false');
+    }
+
+    btn.addEventListener('click', function () {
+      setOpen(btn.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Close after a choice is made -- both in-page jumps and outbound links.
+    links.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') setOpen(false);
+    });
+
+    // Rotating the phone or widening the window past the breakpoint would
+    // otherwise leave data-open="true" latched on the desktop tab row.
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 700) setOpen(false);
+    });
+  })();
 </script>
 
 </body>
