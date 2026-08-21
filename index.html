@@ -129,9 +129,9 @@
     transform: translateY(-6.5px) rotate(-45deg);
   }
 
-  /* 700px, not 640: six tabs plus the brand need ~620px, so 640 left them
-     cramped rather than comfortable in the last 60px before they vanished. */
-  @media (max-width: 700px) {
+  /* 780px: seven tabs plus the brand need ~680px, so this leaves the row
+     comfortable rather than cramped right before it collapses. */
+  @media (max-width: 780px) {
     .nav-toggle { display: flex; }
     .nav-links {
       /* .nav is position:sticky, so it is the containing block -- the panel
@@ -162,7 +162,10 @@
 
   /* ---------- Hero ---------- */
   .hero {
-    min-height: calc(100vh - 56px);
+    /* Not a full viewport: surrender ~110px so the "Why NextBSD" kicker and
+       headline crest the fold. A hero that exactly fills the screen reads as
+       the whole page to anyone who does not think to scroll. */
+    min-height: calc(100vh - 166px);
     display: grid;
     place-items: center;
     text-align: center;
@@ -257,6 +260,30 @@
     border: 1px solid #2a2a30;
   }
   .btn-ghost:hover { border-color: #4a4a52; text-decoration: none; }
+
+  .hero-points {
+    margin: 34px auto 0;
+    max-width: 760px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0 10px;
+    color: var(--fg-mute);
+    font-size: 13px;
+    letter-spacing: 0.3px;
+  }
+  .hero-points span { white-space: nowrap; }
+  /* Dot separators drawn in CSS so they never wrap onto a line alone. */
+  .hero-points span + span::before {
+    content: "\00B7";
+    margin-right: 10px;
+    color: #3a3a42;
+  }
+  @media (max-width: 560px) {
+    .hero-points { font-size: 12px; gap: 2px 8px; }
+    .hero-points span + span::before { margin-right: 8px; }
+  }
 
   /* ---------- Section heads ---------- */
   .kicker {
@@ -594,6 +621,7 @@
       <span class="nav-toggle-bar"></span>
     </button>
     <div class="nav-links" id="nav-links">
+      <a href="#why">Why</a>
       <a href="#stack">Status</a>
       <a href="#history">History</a>
       <a href="#team">Team</a>
@@ -652,6 +680,73 @@
 
     <div class="cta">
       <a class="btn btn-primary" href="https://github.com/nextbsd-redux/nextbsd/releases/tag/continuous">Download Preview &rarr;</a>
+    </div>
+
+    <p class="hero-points">
+      <span>Drivers load themselves</span>
+      <span>Real graphics in a VM</span>
+      <span>Writable live ISO</span>
+      <span>launchd as PID&nbsp;1</span>
+      <span>amd64 &amp; arm64</span>
+    </p>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <p class="kicker">Why NextBSD</p>
+    <h2 class="section-title">It just works.</h2>
+    <p class="section-lede">
+      The machine already knows what hardware it has, how to put a picture on
+      the screen, and how to get on the network. You should not have to tell it.
+    </p>
+
+    <div class="benefits">
+      <div class="benefit" style="--b-accent: var(--accent-g);">
+        <div class="b-icon">kext</div>
+        <h3>Drivers load themselves</h3>
+        <p>No <code>loader.conf</code>, no <code>kld_list</code>, no <code>rc.conf</code>. Kexts carry their own device IDs and the kernel scans the live bus. Plugged in <em>is</em> configured.</p>
+      </div>
+      <div class="benefit" style="--b-accent: var(--accent-c);">
+        <div class="b-icon">kms</div>
+        <h3>Real graphics in a virtual machine</h3>
+        <p>Boot it in UTM, QEMU or VirtualBox and the display just works, at a proper resolution, with no driver to install and no <code>xorg.conf</code> to write. FreeBSD leaves a VM on a basic framebuffer; we ship the KMS drivers upstream doesn&rsquo;t.</p>
+      </div>
+      <div class="benefit" style="--b-accent: var(--accent-y);">
+        <div class="b-icon">iso</div>
+        <h3>The perfect union</h3>
+        <p>The live ISO boots to a <em>writable</em> root: a compressed read-only layer with memory-backed copy-on-write on top. Break anything. The disk stays untouched.</p>
+      </div>
+      <div class="benefit" style="--b-accent: var(--accent-r);">
+        <div class="b-icon">pid1</div>
+        <h3>Unparalleled service management</h3>
+        <p>Services are plists, not shell scripts. <code>launchd</code> is PID 1 &mdash; parallel start, launch on demand, and whatever dies comes back.</p>
+      </div>
+      <div class="benefit" style="--b-accent: var(--accent-m);">
+        <div class="b-icon">net</div>
+        <h3>Networking configures itself</h3>
+        <p>DHCP fires the moment a link comes up. Bonjour is in the base, not a port. Wi-Fi waits for the handshake before it claims to be connected.</p>
+      </div>
+      <div class="benefit" style="--b-accent: var(--accent-g);">
+        <div class="b-icon">pkg</div>
+        <h3>The OS is a package</h3>
+        <p><code>pkg upgrade</code> moves base, kernel and userland forward together &mdash; from a repository already configured before you first boot.</p>
+      </div>
+      <div class="benefit" style="--b-accent: var(--accent-c);">
+        <div class="b-icon">mach</div>
+        <h3>Mach IPC in the base system</h3>
+        <p><code>libdispatch</code>, <code>libxpc</code>, CoreFoundation, IOKit. The actual Darwin runtime on a BSD kernel, not a compatibility shim.</p>
+      </div>
+      <div class="benefit" style="--b-accent: var(--accent-y);">
+        <div class="b-icon">arm</div>
+        <h3>amd64 and arm64, equally</h3>
+        <p>Both cross-built, boot-tested and published on every merge. arm64 ships the same day as amd64 &mdash; same image, same ISO, same packages.</p>
+      </div>
+      <div class="benefit" style="--b-accent: var(--accent-m);">
+        <div class="b-icon">bsd</div>
+        <h3>Still FreeBSD underneath</h3>
+        <p>An ABI-compatible kernel. Ports and packages build and run, jails work, UFS and GEOM are untouched. New plumbing, familiar foundation.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -955,7 +1050,7 @@
     // Rotating the phone or widening the window past the breakpoint would
     // otherwise leave data-open="true" latched on the desktop tab row.
     window.addEventListener('resize', function () {
-      if (window.innerWidth > 700) setOpen(false);
+      if (window.innerWidth > 780) setOpen(false);
     });
   })();
 </script>
