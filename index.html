@@ -363,11 +363,17 @@
   .components {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    /* Every row the height of the tallest card, so the status tag -- pinned to
+       the card's bottom edge by margin-top:auto -- lands at the same offset in
+       every card on the page, not merely within its own row. */
+    grid-auto-rows: 1fr;
     gap: 20px;
   }
   @media (max-width: 880px) { .components { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) { .components { grid-template-columns: 1fr; } }
   .component {
+    display: flex;
+    flex-direction: column;
     padding: 26px;
     border: 1px solid var(--line);
     border-radius: 14px;
@@ -391,17 +397,18 @@
     letter-spacing: -0.2px;
   }
   .component p {
-    margin: 0;
+    margin: 0 0 14px;
     color: var(--fg-dim);
     font-size: 14.5px;
     line-height: 1.55;
   }
   .component .tag {
     display: inline-block;
+    align-self: flex-start;
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    margin-top: 14px;
+    margin-top: auto;
     padding: 3px 8px;
     border-radius: 4px;
     background: #15151a;
