@@ -395,9 +395,13 @@
   }
   .benefit:hover { border-color: #2a2a30; transform: translateY(-2px); }
   .benefit .b-icon {
-    width: 44px; height: 44px;
+    /* Square by default, but grows sideways for a longer label like
+       "bsd/linux" rather than letting it spill out of a fixed 44px box. */
+    width: fit-content; min-width: 44px; height: 44px;
+    padding: 0 11px;
     border-radius: 12px;
     display: grid; place-items: center;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.3px;
     margin-bottom: 18px;
     background: #16161a;
     border: 1px solid #232328;
@@ -743,7 +747,7 @@
         <p>Both cross-built, boot-tested and published on every merge. arm64 ships the same day as amd64 &mdash; same image, same ISO, same packages.</p>
       </div>
       <div class="benefit" style="--b-accent: var(--accent-m);">
-        <div class="b-icon">bsd</div>
+        <div class="b-icon">bsd/linux</div>
         <h3>Bring your software with you</h3>
         <p>FreeBSD ports and packages build and run. So do Linux binaries, unmodified &mdash; no container, no VM, no emulator. Bring what you already have.</p>
       </div>
