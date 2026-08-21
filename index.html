@@ -591,49 +591,49 @@
         <div class="icon" style="color: #fff;">L</div>
         <h4>launchd</h4>
         <p>Apple&rsquo;s <code>launchd-842.92.1</code> &mdash; the last open-source release &mdash; ported onto our Mach + libxpc stack. PID 1 capable.</p>
-        <span class="tag ok">Working</span>
+        <span class="tag ok">Done</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-r);">X</div>
         <h4>libxpc</h4>
         <p>Typed inter-process messaging on top of libdispatch + Mach. Forked from ravynOS; bootstrap server + connection lifecycle in flight.</p>
-        <span class="tag ok">Working</span>
+        <span class="tag ok">Done</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-c);">D</div>
         <h4>libdispatch</h4>
         <p>Grand Central Dispatch with a native Mach backend for our kernel &mdash; <code>DISPATCH_SOURCE_TYPE_MACH_RECV</code> on kqueue.</p>
-        <span class="tag ok">Working</span>
+        <span class="tag ok">Done</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-g);">C</div>
         <h4>CoreFoundation</h4>
         <p>Hybrid CF: GNUstep libs-corebase for value types; swift-corelibs CF for CFMachPort, CFRunLoop, CFBundle. Ships with Apple ICU.</p>
-        <span class="tag ok">Working</span>
+        <span class="tag ok">Done</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-m);">N</div>
         <h4>notifyd / ASL</h4>
         <p>Lightweight named-event bus and Apple System Logger &mdash; structured log records, BSD-text dual output, same C API.</p>
-        <span class="tag ok">Working</span>
+        <span class="tag ok">Done</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-y);">cfg</div>
         <h4>configd</h4>
         <p>One daemon owns network state, hostname, DNS. Apple&rsquo;s configd ported as <code>netconfigd</code> with a Mach-RPC API.</p>
-        <span class="tag ok">Working</span>
+        <span class="tag ok">Done</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-m);">mdns</div>
         <h4>mDNSResponder</h4>
         <p>Apple&rsquo;s Bonjour &mdash; multicast DNS and DNS-SD service discovery, ported as the system mDNS daemon with the same <code>dns-sd</code> API.</p>
-        <span class="tag ok">Working</span>
+        <span class="tag ok">Done</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-c);">io</div>
         <h4>IOKit registry</h4>
         <p>A replacement for <code>devmatch</code>/<code>devd</code> exposing an IOKit-shape IORegistry &mdash; <code>IOServiceWaitQuiet</code>, <code>IORegistryEntryGetBusyState</code>, and <code>IOKitWaitQuiet</code>.</p>
-        <span class="tag ok">Working</span>
+        <span class="tag ok">Done</span>
       </div>
       <div class="component">
         <div class="icon" style="color: #fff;">fs</div>
@@ -651,61 +651,61 @@
         <div class="icon" style="color: var(--accent-c);">net</div>
         <h4>network_cmds</h4>
         <p>Darwin&rsquo;s <code>network_cmds</code> &mdash; <code>ifconfig</code>, <code>route</code>, <code>netstat</code> and the networking userland.</p>
-        <span class="tag work">In progress</span>
+        <span class="tag plan">TODO</span>
       </div>
       <div class="component">
         <div class="icon" style="color: #fff;">fl</div>
         <h4>file_cmds</h4>
         <p>Darwin&rsquo;s <code>file_cmds</code> &mdash; <code>cp</code>, <code>mv</code>, <code>ls</code>, <code>chmod</code> and the core file-manipulation utilities.</p>
-        <span class="tag work">In progress</span>
+        <span class="tag plan">TODO</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-g);">sh</div>
         <h4>shell_cmds</h4>
         <p>Darwin&rsquo;s <code>shell_cmds</code> &mdash; shell-era basics: <code>echo</code>, <code>test</code>, <code>kill</code>, <code>su</code>, and their companions.</p>
-        <span class="tag work">In progress</span>
+        <span class="tag plan">TODO</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-r);">sys</div>
         <h4>system_cmds</h4>
         <p>Darwin&rsquo;s <code>system_cmds</code> &mdash; <code>ps</code>, <code>sysctl</code>, <code>login</code>, and low-level system administration tools.</p>
-        <span class="tag work">In progress</span>
+        <span class="tag plan">TODO</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-m);">txt</div>
         <h4>text_cmds</h4>
         <p>Darwin&rsquo;s <code>text_cmds</code> &mdash; text-processing utilities: <code>sort</code>, <code>uniq</code>, <code>cut</code>, <code>cat</code>, and friends.</p>
-        <span class="tag work">In progress</span>
+        <span class="tag plan">TODO</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-y);">adv</div>
         <h4>adv_cmds</h4>
         <p>Darwin&rsquo;s <code>adv_cmds</code> &mdash; the advanced commands grab-bag: locale tooling, <code>finger</code>, <code>last</code>, and more.</p>
-        <span class="tag work">In progress</span>
+        <span class="tag plan">TODO</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-c);">pm</div>
         <h4>PowerManagement</h4>
         <p>Darwin&rsquo;s <code>PowerManagement</code> &mdash; <code>pmset</code> and the power-management userland for sleep, wake, and battery policy.</p>
-        <span class="tag work">In progress</span>
+        <span class="tag plan">TODO</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-y);">img</div>
         <h4>IMG + ISO</h4>
-        <p>A bootable disk image you can write to USB and boot today; an ISO follows later for CD/optical and virtual machine convenience.</p>
-        <span class="tag work">In progress</span>
+        <p>A bootable disk image you can write to USB, plus an ISO for optical media and virtual machines &mdash; both built for amd64 and arm64 on every continuous build.</p>
+        <span class="tag ok">Done</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-g);">ins</div>
         <h4>Installer</h4>
         <p>Lay down a fresh install &mdash; from tagged releases or rolling continuous builds alike.</p>
-        <span class="tag plan">Planned</span>
+        <span class="tag ok">Done</span>
       </div>
       <div class="component">
         <div class="icon" style="color: var(--accent-g);">upd</div>
         <h4>Updater</h4>
         <p>Move an existing system forward in place &mdash; tracking releases or the rolling continuous stream.</p>
-        <span class="tag plan">Planned</span>
+        <span class="tag ok">Done</span>
       </div>
     </div>
   </div>
